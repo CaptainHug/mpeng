@@ -11,8 +11,6 @@ logger.add(logger.transports.Console, {
 });
 logger.level = 'debug';
 
-logger.info('mpeng starting up');
-
 // setup server
 var app = express();
 var server = http.createServer(app);
@@ -35,3 +33,5 @@ io.on("connection", function(client) {
 });
 
 server.listen(config.server.port);
+
+logger.info("mpeng v" + config.server.version + " started up");
