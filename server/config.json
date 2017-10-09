@@ -1,0 +1,8 @@
+{
+	"database": {
+		"host": "localhost",
+		"port": 3006,
+		"user": "dbuser",
+		"pass": "dbpass"
+	}
+}
