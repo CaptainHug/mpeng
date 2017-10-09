@@ -1,0 +1,10 @@
+{
+  "name": "mpeng",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "author": "",
+  "dependencies": {
+	"winston": "~2.4.0"
+  }
+}
