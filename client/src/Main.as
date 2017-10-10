@@ -5,6 +5,8 @@ package
 	import flash.display.StageQuality;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.text.TextField;
+	import flash.text.TextFormat;
 	import flash.utils.setTimeout;
 	import network.GameServer;
 	import network.GameServerEvent;
@@ -14,6 +16,7 @@ package
 	 * @author jrh
 	 */
 	[Frame(factoryClass = "Preloader")]
+	//[SWF(width="1013", height="665", backgroundColor="#000000", frameRate="30")]
 	[SWF(width="1013", height="665", backgroundColor="#000000", frameRate="30")]
 	public class Main extends Sprite 
 	{
@@ -31,9 +34,23 @@ package
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			
 			// entry point
-			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.scaleMode = StageScaleMode.SHOW_ALL;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.quality = StageQuality.BEST;
+			
+			Resource.registerFonts();
+			
+			graphics.beginFill(0x000000);
+			graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			graphics.endFill();
+			
+			var textfield:TextField = new TextField();
+			textfield.embedFonts = true;
+			textfield.defaultTextFormat = new TextFormat(Resource.F_BUMBASTIKA, 20, 0xffffff);
+			textfield.text = "MPENG";
+			textfield.width = 600;
+			textfield.height = 600;
+			addChild(textfield);
 			
 			trace("Hello");
 			
@@ -52,7 +69,6 @@ package
 			trace("onConnection");
 			
 			_server.sendExtMessage("lobby", "signup", { name:"cramwell", password:"ballbags" } );
-			_server.sendExtMessage("game", "move", { x:100, y:120 } );
 			
 			trace("boom");
 		}
