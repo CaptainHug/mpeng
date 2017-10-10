@@ -1,13 +1,6 @@
 var config = require('./config.json');
-var logger = require('winston');
 var io = require("socket.io");
-
-// Setup logger
-logger.remove(logger.transports.Console);
-logger.add(logger.transports.Console, {
-	colorize: true
-});
-logger.level = 'debug';
+var Players = require("./logic/players.js");
 
 // setup server
 var socket = io.listen(config.server.port);
@@ -18,17 +11,32 @@ socket.configure(function() {
 });
 
 socket.sockets.on("connection", function(client) {
-	logger.info("Client connected: " + client.id);
+	console.log("Client connected: " + client.id);
 	
 	client.on("message", function(data) {
-		logger.info("Client message: data = " + JSON.stringify(data));
+		console.log("Client message: data = " + JSON.stringify(data));
 		
-		client.emit("custom", {ball:"bag"});
+		// TODO: make this more automatic (but safe)
+		if(data && data.handler) {
+			switch(data.handler) {
+				case "lobby":
+					require("./messageHandlers/lobby.js")(client, data);
+				break;
+				
+				case "game":
+					require("./messageHandlers/game.js")(client, data);
+				break;
+			}
+		}
 	});
 	
 	client.on("disconnect", function(data) {
-		logger.info("Client disconnected");
+		console.log("Client disconnected");
+		
+		// TODO: clear online status in database
+		// TODO: clean up user object
+		Players.removePlayer(client.id);
 	});
 });
 
-logger.info("mpeng v" + config.server.version + " started up");
+console.log("mpeng v" + config.server.version + " started up");
