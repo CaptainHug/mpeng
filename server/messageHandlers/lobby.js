@@ -75,22 +75,41 @@ function onLogin(client, data)
 	
 	// TODO: validate username / password
 	
-	// TODO: set online status & last login in database
-	
-	// log user in
-	var player = new Player();
-	player.name = username;
-	Players.addPlayer(client.id, player);
-	
-	// debug list of all the players
-	var allPlayers = Players.getPlayers();
-	for(var k in allPlayers) {
-		if(allPlayers[k]) {
-			console.log("allPlayers["+k+"] = " + allPlayers[k].name);
+	// check if user exists with name/password combination
+	var query = "select userid from User where name=? and password=md5(?) limit 1";
+	db.query(query, [username, password], function(err, result) {
+		if(result && result.length > 0) {
+			
+			var userId = result[0]["userid"];
+			
+			// set lastlogin in database
+			query = "update User set lastlogin=now() where userId=?";
+			db.query(query, [userId], function(err, result) {});
+			
+			// log user in
+			var player = new Player();
+			// TODO: store player db userid
+			player.name = username;
+			Players.addPlayer(client.id, player);
+			
+			// debug list of all the players
+			var allPlayers = Players.getPlayers();
+			for(var k in allPlayers) {
+				if(allPlayers[k]) {
+					console.log("allPlayers["+k+"] = " + allPlayers[k].name);
+				}
+			}
+			
+			// notify user
+			// TODO: send back any useful account information to the client
+			client.emit("message", {cmd:"onLoginOK", params:{userId:userId, name:username}});
+			
 		}
-	}
-	
-	// notify user
-	// TODO: send back any useful account information to the client
-	client.emit("message", {cmd:"onLoginOK", params:{name:username}});
+		else {
+			// login error
+			console.log("lobby:onLogin - login error");
+			client.emit("message", {cmd:"onLoginError", params:{reason:"error"}});
+			return;
+		}
+	});
 }
