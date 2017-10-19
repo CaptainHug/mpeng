@@ -5,9 +5,10 @@
 	},
 	
 	"database": {
+		"connectionLimit": 100,
 		"host": "localhost",
-		"port": 3006,
-		"user": "dbuser",
-		"pass": "dbpass"
+		"user": "mpeng",
+		"password": "P3ngu1n",
+		"database": "mpeng"
 	}
 }

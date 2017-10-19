@@ -1,3 +1,4 @@
+var db = require('../lib/database.js');
 var Players = require("../logic/players.js");
 var Player = require("../logic/player.js");
 
@@ -24,18 +25,45 @@ module.exports = messageHandler_lobby;
 
 function onSignup(client, data)
 {
-	// get username / password from data
-	var username = data.params.name;
-	var password = data.params.password;
-	
-	// TODO: validate username / password
-	
-	// TODO: check username unique
-	
-	// TODO: create database account
-	
-	// log user in (notify user)
-	onLogin(client, data);
+	if(data && data.params) {
+		// get username / password from data
+		var username = data.params.name;
+		var password = data.params.password;
+		
+		// TODO: validate username / password
+		
+		// check username unique
+		var query = "select userid from User where name=?";
+		db.query(query, [username], function(err, result) {
+			if(err) {
+				console.log("lobby:onSignup - error: " + err);
+				client.emit("message", {cmd:"onSignupError", params:{reason:"error"}});
+				return;
+			}
+			else if(result && result.length > 0) {
+				console.log("lobby:onSignup - username exists");
+				client.emit("message", {cmd:"onSignupError", params:{reason:"exists"}});
+				return;
+			}
+			else {
+				// create database account
+				query = "insert into User (name, password, created, lastlogin) values (?, md5(?), now(), now())";
+				db.query(query, [username, password], function(err, result) {
+					if(err) {
+						console.log("lobby:onSignup - insert error: " + err);
+						client.emit("message", {cmd:"onSignupError", params:{reason:"error"}});
+						return;
+					}
+					
+					if(result) {
+						var userId = result.insertId;
+						client.emit("message", {cmd:"onSignupOK", params:{userId:userId, name:username}});
+						return;
+					}
+				});
+			}
+		});
+	}
 }
 
 
@@ -64,5 +92,5 @@ function onLogin(client, data)
 	
 	// notify user
 	// TODO: send back any useful account information to the client
-	client.emit("message", {cmd:"loginOK", params:{name:username}});
+	client.emit("message", {cmd:"onLoginOK", params:{name:username}});
 }
