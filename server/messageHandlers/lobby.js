@@ -88,7 +88,7 @@ function onLogin(client, data)
 			
 			// log user in
 			var player = new Player();
-			// TODO: store player db userid
+			player.userId = userId;
 			player.name = username;
 			Players.addPlayer(client.id, player);
 			
@@ -96,14 +96,13 @@ function onLogin(client, data)
 			var allPlayers = Players.getPlayers();
 			for(var k in allPlayers) {
 				if(allPlayers[k]) {
-					console.log("allPlayers["+k+"] = " + allPlayers[k].name);
+					console.log("allPlayers["+k+"] = (" + allPlayers[k].userId + " | " + allPlayers[k].name + ")");
 				}
 			}
 			
 			// notify user
 			// TODO: send back any useful account information to the client
 			client.emit("message", {cmd:"onLoginOK", params:{userId:userId, name:username}});
-			
 		}
 		else {
 			// login error
