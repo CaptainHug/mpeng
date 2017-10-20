@@ -34,8 +34,13 @@ socket.sockets.on("connection", function(client) {
 		console.log("Client disconnected");
 		
 		// TODO: clear online status in database
-		// TODO: clean up user object
+		
+		// clean up user object
 		Players.removePlayer(client.id);
+		
+		// TODO: move this into the game/room handler code
+		// let everyone know that the player has left
+		client.broadcast.emit("message", {cmd:"onBroadcastPlayerLeft", params:{playerId:client.id}});
 	});
 });
 
