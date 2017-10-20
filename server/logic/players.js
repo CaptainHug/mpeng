@@ -1,5 +1,5 @@
 // globals
-players = [];
+players = {};
 
 
 function Players()

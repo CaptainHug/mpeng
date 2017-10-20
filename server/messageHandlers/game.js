@@ -37,7 +37,7 @@ function onJoinRoom(client, data)
 		player.y = 0;
 		
 		// let player know that they have successfully entered the room
-		client.emit("message", {cmd:"onJoinRoom", params:{player:JSON.stringify(player)}});
+		client.emit("message", {cmd:"onJoinRoom", params:{playerId:client.id, player:JSON.stringify(player), allPlayers:JSON.stringify(Players.getPlayers())}});
 		
 		// let everyone know that a player has entered the room
 		client.broadcast.emit("message", {cmd:"onBroadcastJoinRoom", params:{playerId:client.id, player:JSON.stringify(player)}});
