@@ -40,7 +40,7 @@ function onJoinRoom(client, data)
 		client.emit("message", {cmd:"onJoinRoom", params:{player:JSON.stringify(player)}});
 		
 		// let everyone know that a player has entered the room
-		client.broadcast.emit("message", {cmd:"onBroadcastJoinRoom", params:{player:JSON.stringify(player)}});
+		client.broadcast.emit("message", {cmd:"onBroadcastJoinRoom", params:{playerId:client.id, player:JSON.stringify(player)}});
 	}
 }
 
@@ -54,9 +54,6 @@ function onMove(client, data)
 		player.x = data.params.posX;
 		player.y = data.params.posY;
 		
-		// let player know that they have successfully moved?
-		client.emit("message", {cmd:"onMove", params:{posX:player.x, posY:player.y}});
-		
 		// let everyone know that a player has moved
 		client.broadcast.emit("message", {cmd:"onBroadcastMove", params:{playerId:client.id, posX:player.x, posY:player.y}});
 	}
@@ -69,9 +66,6 @@ function onChat(client, data)
 	if(player) {
 		// TODO: validate / filter chat text
 		var message = data.params.message;
-		
-		// let player know that they have successfully chatted?
-		client.emit("message", {cmd:"onChat", params:{message:message}});
 		
 		// let everyone know that a player has chatted
 		client.broadcast.emit("message", {cmd:"onBroadcastChat", params:{playerId:client.id, message:message}});
