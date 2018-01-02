@@ -1,0 +1,41 @@
+User
+----
+userid (PRI)
+name (UNI)
+password (KEY)
+created
+lastlogin
+
+online
+coins
+diamonds
+xp
+level
+
+
+Item
+----
+itemid (PRI)
+name
+costcoins
+costdiamonds
+created
+
+UserItem
+--------
+useritemid
+userid
+itemid
+purchasedate
+
+ItemLocation (ie. Head, Top, Legs, Feet, Accessory, Pet)
+----------------
+itemlocationid
+name
+
+ActiveUserItem
+----------------
+activeuseritemid
+userid
+itemlocationid
+useritemid
