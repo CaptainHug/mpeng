@@ -5,7 +5,7 @@ var Players = require("./logic/players.js");
 // setup server
 var socket = io.listen(config.server.port);
 socket.configure(function() {
-	socket.set("transports", ["flashsocket", "htmlfile", "xhr-polling", "jsonp-polling"]);
+	socket.set("transports", ["websocket", "flashsocket", "htmlfile", "xhr-polling", "jsonp-polling"]);
 	socket.set('flash policy port', 843);
 	socket.set("log level", 2);
 });
@@ -44,4 +44,4 @@ socket.sockets.on("connection", function(client) {
 	});
 });
 
-console.log("mpeng v" + config.server.version + " started up");
+console.log("mpeng v" + config.server.version + " started up on port " + config.server.port);

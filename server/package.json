@@ -5,7 +5,7 @@
   "main": "server.js",
   "author": "",
   "dependencies": {
-    "socket.io": "0.7",
+    "socket.io": "0.9.17",
 	"md5": "^2.2.1",
     "mysql": "^2.13.0"
   }
