@@ -7,6 +7,7 @@
   "dependencies": {
     "socket.io": "0.9.17",
 	"md5": "^2.2.1",
-    "mysql": "^2.13.0"
+    "mysql": "^2.13.0",
+	"express": "4.16.2"
   }
 }

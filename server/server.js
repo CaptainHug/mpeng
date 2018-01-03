@@ -1,8 +1,19 @@
 var config = require('./config.json');
 var io = require("socket.io");
 var Players = require("./logic/players.js");
+var express = require("express");
+var path = require("path");
 
-// setup server
+// setup static http server
+var app = express();
+app.set("port", 3000);
+app.use(express.static(path.join(__dirname, "public")));
+var server = app.listen(app.get("port"), function() {
+	var port = server.address().port;
+	console.log("Static http server setup on port " + port);
+});
+
+// setup socket server
 var socket = io.listen(config.server.port);
 socket.configure(function() {
 	socket.set("transports", ["websocket", "flashsocket", "htmlfile", "xhr-polling", "jsonp-polling"]);
