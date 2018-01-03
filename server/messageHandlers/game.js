@@ -33,8 +33,9 @@ function onJoinRoom(client, data)
 		// TODO: store room id into player object
 		
 		// reset player data for room
-		player.x = 0;
-		player.y = 0;
+		// TODO: get start point from Room Config data
+		player.x = 521;
+		player.y = 564;
 		
 		// let player know that they have successfully entered the room
 		client.emit("message", {cmd:"onJoinRoom", params:{playerId:client.id, player:JSON.stringify(player), allPlayers:JSON.stringify(Players.getPlayers())}});
